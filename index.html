@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صنع هوية وهمية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #4b0082;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="file"],
+        input[type="tel"] {
+            padding: 10px;
+            margin: 10px 0;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus {
+            border-color: #4b0082;
+        }
+        #idCard {
+            border: 2px solid #32cd32;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #ffffff;
+            width: 350px;
+            margin: 20px auto;
+            display: none;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #idCard img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            border: 2px solid #32cd32;
+        }
+        #idCard h2 {
+            margin: 100px 0 10px 120px;
+            color: #32cd32;
+            font-size: 24px;
+        }
+        #idCard p {
+            margin: 0 0 10px 120px;
+            color: #555;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #6a5acd;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>اصنع هويتك الوهمية</h1>
+    <input type="text" id="name" placeholder="أدخل اسمك" required>
+    <input type="date" id="dob" required>
+    <input type="text" id="country" placeholder="أدخل بلدك" required>
+    <input type="text" id="hobby" placeholder="أدخل هواياتك" required>
+    <input type="text" id="address" placeholder="أدخل عنوانك" required>
+    <input type="tel" id="phone" placeholder="أدخل رقم هاتفك" required>
+    <input type="file" id="imageInput" accept="image/*" required>
+    <button id="createIdBtn">إنشاء الهوية</button>
+
+    <div id="idCard">
+        <img id="profileImage" src="" alt="صورة المستخدم">
+        <h2 id="userName"></h2>
+        <p id="userDob"></p>
+        <p id="userCountry"></p>
+        <p id="userHobby"></p>
+        <p id="userAddress"></p>
+        <p id="userPhone"></p>
+    </div>
+
+    <button id="downloadBtn" style="display:none;">تحميل الهوية</button>
+
+    <script>
+        const createIdBtn = document.getElementById('createIdBtn');
+        const idCard = document.getElementById('idCard');
+        const userName = document.getElementById('userName');
+        const userDob = document.getElementById('userDob');
+        const userCountry = document.getElementById('userCountry');
+        const userHobby = document.getElementById('userHobby');
+        const userAddress = document.getElementById('userAddress');
+        const userPhone = document.getElementById('userPhone');
+        const profileImage = document.getElementById('profileImage');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const imageInput = document.getElementById('imageInput');
+
+        createIdBtn.addEventListener('click', () => {
+            const name = document.getElementById('name').value;
+            const dob = document.getElementById('dob').value;
+            const country = document.getElementById('country').value;
+            const hobby = document.getElementById('hobby').value;
+            const address = document.getElementById('address').value;
+            const phone = document.getElementById('phone').value;
+            const imageFile = imageInput.files[0];
+
+            if (name && dob && country && hobby && address && phone && imageFile) {
+                userName.textContent = name;
+                userDob.textContent = `تاريخ الميلاد: ${dob}`;
+                userCountry.textContent = `البلد: ${country}`;
+                userHobby.textContent = `الهوايات: ${hobby}`;
+                userAddress.textContent = `العنوان: ${address}`;
+                userPhone.textContent = `رقم الهاتف: ${phone}`;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                    idCard.style.display = 'block';
+                    downloadBtn.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(imageFile);
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            html2canvas(idCard).then(canvas => {
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL();
+                link.download = 'identity_card.png';
+                link.click();
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+</body>
+</html>
